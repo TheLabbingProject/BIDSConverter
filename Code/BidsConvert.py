@@ -86,7 +86,7 @@ class BidsGenerator:
             d_name = os.path.dirname(output)
             if not os.path.isdir(d_name):
                 os.makedirs(d_name)
-            cmd = f"dcm2niix -o {d_name} -f {f_name} {dcm_dir}"
+            cmd = f"dcm2niix -o {d_name} -f {f_name} -w 1 {dcm_dir}"
             print(cmd)
             os.system(cmd)
 
@@ -102,14 +102,14 @@ class BidsGenerator:
             ouotput (str or None) - Correct nifti file to be used as target for conversion in order to compile to BIDS specification.
         """
         if acq == "mprage":
-            output = f"{bids_dir}/{subj}/anat/{subj}_acq-T1w"
+            output = f"{bids_dir}/{subj}/anat/{subj}_T1w"
         elif acq == "flair":
-            output = f"{bids_dir}/{subj}/anat/{subj}_acq-T2w"
+            output = f"{bids_dir}/{subj}/anat/{subj}_FLAIR"
         elif acq == "ep2d":
             if "AP" in dcm_dir:
                 output = f"{bids_dir}/{subj}/dwi/{subj}_acq-AP_dwi"
             elif "PA" in dcm_dir:
-                output = f"{bids_dir}/{subj}/fmap/{subj}_acq-PA_dwi"
+                output = f"{bids_dir}/{subj}/fmap/{subj}_dir-PA_epi"
             else:
                 output = None
         elif acq == "fmri":
@@ -121,6 +121,16 @@ class BidsGenerator:
             output = None
         return output
 
+    def fix_jsons(self):
+        jsons = glob.glob(f"{self.bids_dir}/sub*/func/*_bold.json")
+        for js in jsons:
+            with open(js, "r+") as f:
+                data = json.load(f)
+                data["TaskName"] = "rest"
+                f.seek(0)
+                json.dump(data, f, indent=4)
+                f.truncate()
+
     def run(self):
         """
         Generate a BIDS compiant directory based on a raw data (dicom) directory.
@@ -130,6 +140,7 @@ class BidsGenerator:
         for dcm_dir in dcm_dirs:
             if os.path.isdir(dcm_dir):
                 self.convert_dcm(dcm_dir, self.bids_dir)
+        self.fix_jsons()
         self.list_files(self.bids_dir)
 
 
