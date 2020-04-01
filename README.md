@@ -4,14 +4,13 @@
 Create, manipulate, validate and present a BIDS compliant directory.
 
 ## Class BidsGenerator
-Contains several functions aimed at generating the main sub directories for the BIDS compliant dataset. (i.e, converting the raw dicom files to BIDS-sorted niftis)
+contains several functions aimed at generating the main sub directories for the BIDS compliant dataset. (i.e, converting the raw dicom files to BIDS-sorted niftis)
 
->        """
->        Initialize a class that creates/validates/presents a BIDS compliant directory.
->        Arguments:
->            raw {str} -- Path to a directory that contains the raw dicom files. (sourcedata)
->            bids_dir {str} -- Path to the directory to initialize as a BIDS compliant one.
->        """
+> Initialize a class that creates/validates/presents a BIDS compliant directory.
+* Arguments:
+    * raw {str} -- Path to a directory that contains the raw dicom files. (sourcedata)
+    * bids_dir {str} -- Path to the directory to initialize as a BIDS compliant one.
+
 
 ### Usage:
 ```
