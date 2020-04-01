@@ -6,12 +6,12 @@ Create, manipulate, validate and present a BIDS compliant directory.
 ## Class BidsGenerator
 Contains several functions aimed at generating the main sub directories for the BIDS compliant dataset. (i.e, converting the raw dicom files to BIDS-sorted niftis)
 
->>        """
->>        Initialize a class that creates/validates/presents a BIDS compliant directory.
->>        Arguments:
->>            raw {str} -- Path to a directory that contains the raw dicom files. (sourcedata)
->>            bids_dir {str} -- Path to the directory to initialize as a BIDS compliant one.
->>        """
+>        """
+>        Initialize a class that creates/validates/presents a BIDS compliant directory.
+>        Arguments:
+>            raw {str} -- Path to a directory that contains the raw dicom files. (sourcedata)
+>            bids_dir {str} -- Path to the directory to initialize as a BIDS compliant one.
+>        """
 
 ### Usage:
 ```
@@ -59,14 +59,15 @@ Contains several functions aimed at generating BIDS compliant dataset descriptiv
 
 * Note that this class does not create the recommended README file, as it should be manually created by the researcher.
 
->>>        """
->>>        Generate BIDS compliant dataset description file and participants file (based on a template and CRF file)
->>>        Arguments:
->>>            bids_dir {str} -- Path to the directory to initialize as a BIDS compliant one.
->>>            subj_temp {str} -- Participant template file as can be obtained from https://github.com/bids-standard/bids-starter-kit/tree/master/templates
->>>            crf {str} -- A CRF files containing data regarding the participants in the dataset.
->>>            ds_temp (str) -- Path to a dataset description template as can be obtained from https://github.com/bids-standard/bids-starter-kit/tree/master/templates
->>>        """
+> Generate BIDS compliant dataset description file and participants file (based on a template and CRF file)
+
+* Arguments:
+    * bids_dir {str} -- Path to the directory to initialize as a BIDS compliant one.
+    subj_temp {str} -- Participant template file as can be obtained
+    [here](https://github.com/bids-standard/bids-starter-kit/tree/master/templates).
+    * crf {str} -- A CRF files containing data regarding the participants in the dataset.
+    * ds_temp (str) -- Path to a dataset description template as can also be obtained [here](https://github.com/bids-standard/bids-starter-kit/tree/master/templates)
+
 
 ### Usage:
 ```

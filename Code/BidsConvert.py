@@ -99,7 +99,7 @@ class BidsGenerator:
             subj (str) -- Subject's id (sub-xx)
             bids_dir (str) -- Path to BIDS directory.
         Returns:
-            ouotput (str or None) - Correct nifti file to be used as target for conversion in order to compile to BIDS specification.
+            output - Correct nifti file to be used as target for conversion in order to compile to BIDS specification.
         """
         if acq == "mprage":
             output = f"{bids_dir}/{subj}/anat/{subj}_T1w"
@@ -144,8 +144,18 @@ class BidsGenerator:
         self.list_files(self.bids_dir)
 
 
+SUBJ_TEMP = "./templates/participants.tsv"
+DS_TEMP = "./template/dataset_description.json"
+
+
 class FilesGenerator:
-    def __init__(self, bids_dir: str, subj_temp: str, crf: str, ds_temp: str):
+    def __init__(
+        self,
+        bids_dir: str,
+        crf: str,
+        subj_temp: str = SUBJ_TEMP,
+        ds_temp: str = DS_TEMP,
+    ):
         """
         Generate BIDS compliant dataset description file and participants file (based on a template and CRF file)
         Arguments:
