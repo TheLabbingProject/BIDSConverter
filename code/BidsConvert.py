@@ -2,7 +2,7 @@ import glob, os
 import dicom_parser
 import pandas as pd
 import json
-
+from BIDSConverter.templates import templates
 
 class BidsGenerator:
     """
@@ -144,8 +144,8 @@ class BidsGenerator:
         self.list_files(self.bids_dir)
 
 
-SUBJ_TEMP = "./templates/participants.tsv"
-DS_TEMP = "./template/dataset_description.json"
+SUBJ_TEMP = templates.Templates.participants.value
+DS_TEMP = templates.Templates.dataset.value
 
 
 class FilesGenerator:
