@@ -2,6 +2,7 @@ import glob, os
 import dicom_parser
 import pandas as pd
 import json
+from pathlib import Path
 from BIDSConverter.templates import templates
 
 class BidsGenerator:
@@ -9,18 +10,18 @@ class BidsGenerator:
     Create, manipulate, validate and present a BIDS compliant directory.
     """
 
-    def __init__(self, bids_dir: str, raw: str):
+    def __init__(self, bids_dir: Path, raw: Path):
         """
         Initialize a class that creates/validates/presents a BIDS compliant directory.
         Arguments:
-            raw {str} -- Path to a directory that contains the raw dicom files. (sourcedata)
-            bids_dir {str} -- Path to the directory to initialize as a BIDS compliant one.
+            raw {Path} -- Path to a directory that contains the raw dicom files. (sourcedata)
+            bids_dir {Path} -- Path to the directory to initialize as a BIDS compliant one.
         """
-        self.bids_dir = bids_dir
-        self.raw = raw
-        if not os.path.isdir(bids_dir):
+        self.bids_dir = Path(bids_dir)
+        self.raw = Path(raw)
+        if not bids_dir.is_dir():
             print("Creating BIDS mother dir...")
-            os.mkdir(bids_dir)
+            bids_dir.mkdir()
         if not os.listdir(bids_dir):
             print(f"Initializing BIDS directory at {bids_dir}...")
             self.init_bids_dir(self.raw, self.bids_dir)
@@ -40,7 +41,7 @@ class BidsGenerator:
                 if ".DS_Store" not in f:
                     print("{}{}".format(subindent, f))
 
-    def init_bids_dir(self, raw: str, bids_dir: str):
+    def init_bids_dir(self, raw: Path, bids_dir: Path):
         """
         Initialize the main directories that need to conduct the BIDS compiant mother directory.
         Arguments:
@@ -48,12 +49,12 @@ class BidsGenerator:
             bids_dir {str} -- Path to BIDS directory.
         """
         acqs = ["anat", "fmap", "func", "dwi"]
-        for subj in os.listdir(raw):
-            os.mkdir(f"{bids_dir}/{subj}")
+        for subj in raw.iterdir():
+            Path(bids_dir / subj).mkdir()
             for subdir in acqs:
                 os.mkdir(f"{bids_dir}/{subj}/{subdir}")
         print(f"Created a bids-like directory tree at {bids_dir}")
-        self.list_files(bids_dir)
+        self.list_files(str(bids_dir))
 
     def get_raw_acq(self, dcm_dir: str):
         """
@@ -71,16 +72,16 @@ class BidsGenerator:
         os.chdir(cur_dir)
         return acq
 
-    def convert_dcm(self, dcm_dir: str, bids_dir: str):
+    def convert_dcm(self, dcm_dir: Path, bids_dir: Path):
         """
         Convert raw dicom to nifti in the correct target dir according to BIDS specifications.
         Arguments:
-            dcm_dir {str} -- Path to a directory that contains dicom files.
-            bids_dir {str} -- Path to BIDS directory.
+            dcm_dir {Path} -- Path to a directory that contains dicom files.
+            bids_dir {Path} -- Path to BIDS directory.
         """
-        subj = dcm_dir.split(os.sep)[-2]
-        acq = self.get_raw_acq(dcm_dir)
-        output = self.get_output(dcm_dir, acq, subj, bids_dir)
+        subj = dcm_dir.parent.name
+        acq = self.get_raw_acq(str(dcm_dir))
+        output = self.get_output(str(dcm_dir), acq, subj, bids_dir)
         if output:
             f_name = output.split(os.sep)[-1]
             d_name = os.path.dirname(output)
